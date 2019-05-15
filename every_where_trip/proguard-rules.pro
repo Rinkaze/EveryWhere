@@ -220,8 +220,8 @@
 -keep public class * extends android.app.Fragment
 
 # 保留内嵌类不被混淆
--keep class com.everywhere.trip.ui.main.adapter.* { *; }
--keep class com.everywhere.trip.ui.my.adapter.* { *; }
+#-keep class com.everywhere.trip.ui.main.adapter.* { *; }
+#-keep class com.everywhere.trip.ui.my.adapter.* { *; }
 
 #Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
