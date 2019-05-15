@@ -1,0 +1,1 @@
+include ':app', ':every_where_trip', ':app2', ':memory'
