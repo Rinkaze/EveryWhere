@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
 
 	/**
 	*
-	*	Created by Rinkaze for 2019/05/15
+	*	Created by 灵风 for 2019/05/15
 	*
 	*/
 
