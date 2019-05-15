@@ -38,6 +38,12 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implements EmptyView {
 
+	/**
+	*
+	*	Created by Rinkaze for 2019/05/15
+	*
+	*/
+
     @BindView(R.id.iv_header)
     ImageView ivHeader;
     @BindView(R.id.iv_message)
