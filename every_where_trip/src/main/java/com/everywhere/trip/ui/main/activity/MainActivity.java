@@ -41,7 +41,6 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
 	/**
 	*
 	*	Created by Rinkaze
-	*
 	*/
 
     @BindView(R.id.iv_header)
