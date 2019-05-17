@@ -105,4 +105,5 @@ dependencies {
     implementation files('libs/umeng-common-2.0.2.jar')
     implementation 'com.bm.photoview:library:1.4.1'
     implementation 'com.youth.banner:banner:1.4.10'
+    implementation 'com.github.LuoGuoXin:BaseAndroid:1.0.5'
 }

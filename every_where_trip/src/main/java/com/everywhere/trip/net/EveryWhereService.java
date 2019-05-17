@@ -7,6 +7,7 @@ import com.everywhere.trip.bean.LikeBean;
 import com.everywhere.trip.bean.LoginInfo;
 import com.everywhere.trip.bean.MainDataBean;
 import com.everywhere.trip.bean.MainDataInfo;
+import com.everywhere.trip.bean.VersionInfo;
 
 import java.util.HashMap;
 
@@ -100,4 +101,7 @@ public interface EveryWhereService {
 
     @GET("api/3.0/content/bundles")
     Observable<BundlesBean> getBundles(@Header("banmi-app-token")String token);
+
+    @GET("api/app/common/getVersionInfo?operating_system=android")
+    Observable<VersionInfo> checkVersion(@Header("banmi-app-token")String token);
 }

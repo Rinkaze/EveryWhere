@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".base.BaseApp"
@@ -76,8 +77,8 @@
 
         <activity
             android:name=".ui.main.activity.MainActivity"
-            android:theme="@style/NoActionBar"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:theme="@style/FullScreen" />
         <activity android:name=".ui.my.activity.InformationActivity" />
         <activity android:name=".ui.my.activity.UpdateInfoActivity" />
         <activity android:name=".ui.my.activity.FollowActivity" />
@@ -102,8 +103,9 @@
 
         <activity android:name=".ui.main.activity.BanmiInfoActivity" />
         <activity android:name=".ui.main.activity.ReviewsActivity" />
-        <activity android:name=".ui.main.activity.WebViewActivity"/>
-        <activity android:name=".ui.main.activity.SubjectActivity"/>
+        <activity android:name=".ui.main.activity.WebViewActivity" />
+        <activity android:name=".ui.main.activity.SubjectActivity" />
+        <activity android:name=".ui.main.fragment.MyFragment"></activity>
     </application>
 
 </manifest>
