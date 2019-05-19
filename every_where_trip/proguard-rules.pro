@@ -178,6 +178,11 @@
       public static <fields>;
   }
 
+  #百度地图
+  -keep class com.baidu.** {*;}
+  -keep class mapsdkvi.com.** {*;}
+  -dontwarn com.baidu.**
+
   #避免混淆泛型 如果混淆报错建议关掉
   #-keepattributes Signature
 
@@ -221,7 +226,7 @@
 
 # 保留内嵌类不被混淆
 -keep class com.everywhere.trip.ui.main.adapter.* { *; }
--keep class com.everywhere.trip.ui.my.adapter.* { *; }
+#-keep class com.everywhere.trip.ui.my.adapter.* { *; }
 
 #Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule

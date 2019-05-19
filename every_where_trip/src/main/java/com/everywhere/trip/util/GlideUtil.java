@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.everywhere.trip.R;
@@ -83,5 +84,15 @@ public class GlideUtil {
                 .load(url)
                 .apply(options)
                 .into(iv);
+    }
+
+    public static void loadNoCatchImg(Context context,int placeholder,Object object,ImageView imageView){
+        RequestOptions requestOptions = new RequestOptions()
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE);//不做缓存
+        Glide.with(context)
+                .load(object)
+                .apply(requestOptions)
+                .into(imageView);
     }
 }
