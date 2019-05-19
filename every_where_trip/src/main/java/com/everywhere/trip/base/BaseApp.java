@@ -1,11 +1,16 @@
 package com.everywhere.trip.base;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.res.Resources;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.baidu.mapapi.CoordType;
+import com.baidu.mapapi.SDKInitializer;
 import com.everywhere.trip.R;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
@@ -19,7 +24,7 @@ import luo.library.base.base.BaseConfig;
  * Created by asus on 2019/3/5.
  */
 
-public class BaseApp extends Application {
+public class BaseApp extends MultiDexApplication {
     private static BaseApp sBaseApp;
     public static int mWidthPixels;
     public static int mHeightPixels;
@@ -31,6 +36,15 @@ public class BaseApp extends Application {
         getScreenWH();
         initUmeng();
         initUpdate();
+        initBaiduMap();
+    }
+
+    private void initBaiduMap() {
+        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
+        SDKInitializer.initialize(this);
+        //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
+        //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
+        SDKInitializer.setCoordType(CoordType.BD09LL);
     }
 
     private void initUpdate() {
@@ -71,5 +85,12 @@ public class BaseApp extends Application {
 
     public static Resources getRes() {
         return sBaseApp.getResources();
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

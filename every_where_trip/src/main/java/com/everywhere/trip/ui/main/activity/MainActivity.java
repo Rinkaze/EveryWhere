@@ -3,50 +3,32 @@ package com.everywhere.trip.ui.main.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.CardView;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.baidu.mapapi.model.LatLng;
 import com.everywhere.trip.R;
 import com.everywhere.trip.base.BaseActivity;
 import com.everywhere.trip.base.Constants;
-import com.everywhere.trip.bean.VersionInfo;
-import com.everywhere.trip.net.HttpUtils;
 import com.everywhere.trip.presenter.EmptyPresenter;
-import com.everywhere.trip.presenter.VersionPresenter;
 import com.everywhere.trip.ui.main.fragment.BanmiFragment;
 import com.everywhere.trip.ui.main.fragment.MainFragment;
+import com.everywhere.trip.ui.main.fragment.MapFragment;
 import com.everywhere.trip.ui.main.fragment.MyFragment;
-import com.everywhere.trip.ui.my.activity.FollowActivity;
-import com.everywhere.trip.ui.my.activity.InformationActivity;
-import com.everywhere.trip.ui.my.activity.LikeActivity;
-import com.everywhere.trip.util.GlideUtil;
-import com.everywhere.trip.util.InstallUtil;
 import com.everywhere.trip.util.SpUtil;
-import com.everywhere.trip.util.UpdateManager;
 import com.everywhere.trip.view.main.EmptyView;
-import com.everywhere.trip.view.main.VersionView;
 import com.jaeger.library.StatusBarUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import luo.library.base.base.BaseAndroid;
 
 public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implements EmptyView {
 
@@ -58,7 +40,8 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
 
     @BindView(R.id.iv_message)
     ImageView ivMessage;
-
+    @BindView(R.id.tv_city)
+    TextView tvCity;
     @BindView(R.id.rl_title)
     RelativeLayout rlTitle;
     @BindView(R.id.fragment_container)
@@ -68,12 +51,15 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
     private ArrayList<Fragment> fragments;
     private FragmentManager manager;
     final int TYPE_MAIN = 0;
-    final int TYPE_BANMI = 1;
-    final int TYPE_MY = 2;
+    final int TYPE_MAP = 1;
+    final int TYPE_BANMI = 2;
+    final int TYPE_MY = 3;
     private int lastPosition = 0;
     private TextView tvMain;
     private TextView tvBanmi;
     private TextView tvMy;
+    private TextView tvMap;
+    private MapFragment mapFragment;
 
     @Override
     protected EmptyPresenter initPresenter() {
@@ -89,6 +75,7 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
     protected void initView() {
         StatusBarUtil.setLightMode(this);
         tab.addTab(tab.newTab().setCustomView(R.layout.item_tab_main));
+        tab.addTab(tab.newTab().setCustomView(R.layout.item_tab_map));
         tab.addTab(tab.newTab().setCustomView(R.layout.item_tab_banmi));
         tab.addTab(tab.newTab().setCustomView(R.layout.item_tab_my));
         tvMain = (TextView) tab.getTabAt(0).getCustomView().findViewById(R.id.tv_main);
@@ -102,6 +89,8 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
         bundle.putString(Constants.DATA, (String) SpUtil.getParam(Constants.TOKEN, ""));
         mainFragment.setArguments(bundle);
         fragments.add(mainFragment);
+        mapFragment = new MapFragment();
+        fragments.add(mapFragment);
         fragments.add(new BanmiFragment());
         fragments.add(new MyFragment());
         manager = getSupportFragmentManager();
@@ -115,6 +104,9 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
         tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() != 1){
+                    tvCity.setVisibility(View.GONE);
+                }
                 switch (tab.getPosition()) {
                     case 0:
                         tvMain.setTextColor(getResources().getColor(R.color.c_fa6a13));
@@ -124,9 +116,29 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
                         if (tvMy != null) {
                             tvMy.setTextColor(getResources().getColor(R.color.c_cecece));
                         }
+                        if (tvMap != null){
+                            tvMap.setTextColor(getResources().getColor(R.color.c_cecece));
+                        }
                         switchFragment(TYPE_MAIN);
                         break;
                     case 1:
+                        tvCity.setVisibility(View.VISIBLE);
+                        if (tvMap == null) {
+                            tvMap = (TextView) tab.getCustomView().findViewById(R.id.tv_map);
+                        }
+                        if (tvMain != null) {
+                            tvMain.setTextColor(getResources().getColor(R.color.c_cecece));
+                        }
+                        if (tvMy != null) {
+                            tvMy.setTextColor(getResources().getColor(R.color.c_cecece));
+                        }
+                        if (tvBanmi != null){
+                            tvBanmi.setTextColor(getResources().getColor(R.color.c_cecece));
+                        }
+                        tvMap.setTextColor(getResources().getColor(R.color.c_fa6a13));
+                        switchFragment(TYPE_MAP);
+                        break;
+                    case 2:
                         if (tvBanmi == null) {
                             tvBanmi = (TextView) tab.getCustomView().findViewById(R.id.tv_banmi);
                         }
@@ -136,10 +148,13 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
                         if (tvMy != null) {
                             tvMy.setTextColor(getResources().getColor(R.color.c_cecece));
                         }
+                        if (tvMap != null){
+                            tvMap.setTextColor(getResources().getColor(R.color.c_cecece));
+                        }
                         tvBanmi.setTextColor(getResources().getColor(R.color.c_fa6a13));
                         switchFragment(TYPE_BANMI);
                         break;
-                    case 2:
+                    case 3:
                         if (tvMy == null) {
                             tvMy = (TextView) tab.getCustomView().findViewById(R.id.tv_my);
                         }
@@ -148,6 +163,9 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
                         }
                         if (tvBanmi != null){
                             tvBanmi.setTextColor(getResources().getColor(R.color.c_cecece));
+                        }
+                        if (tvMap != null){
+                            tvMap.setTextColor(getResources().getColor(R.color.c_cecece));
                         }
                         tvMy.setTextColor(getResources().getColor(R.color.c_fa6a13));
                         switchFragment(TYPE_MY);
@@ -166,6 +184,12 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
             }
         });
 
+        tvCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(MainActivity.this,CityActivity.class),1);
+            }
+        });
     }
 
     private static final String TAG = "MainActivity";
@@ -182,4 +206,19 @@ public class MainActivity extends BaseActivity<EmptyView, EmptyPresenter> implem
         lastPosition = type;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tvCity.setText((String) SpUtil.getParam("cityName","北京"));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == 200){
+            if (mapFragment != null){
+                mapFragment.updateMap((LatLng) data.getParcelableExtra("latlng"));
+            }
+        }
+    }
 }
