@@ -30,8 +30,4 @@ public class MyListView extends ListView {
         super.onMeasure(widthMeasureSpec, height);
     }
 
-    @Override
-    public void setSelection(int position) {
-        super.setSelection(position);
-    }
 }

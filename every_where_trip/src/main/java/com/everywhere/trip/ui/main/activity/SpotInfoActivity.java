@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.everywhere.trip.R;
 import com.everywhere.trip.base.BaseActivity;
@@ -28,11 +29,13 @@ public class SpotInfoActivity extends BaseActivity<SpotInfoView, SpotInfoPresent
     public void onSuccess(SpotInfo.ResultEntity.SpotEntity spotEntity) {
         adapter = new RecSpotInfoAdapter(this, spotEntity);
         mRecView.setAdapter(adapter);
+        hideLoading();
     }
 
     @Override
     public void onFail(String msg) {
-
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        hideLoading();
     }
 
     @Override
@@ -56,6 +59,7 @@ public class SpotInfoActivity extends BaseActivity<SpotInfoView, SpotInfoPresent
     @Override
     protected void initData() {
         mPresenter.getSpotInfo(getIntent().getIntExtra("spotId",695));
+        showLoading();
     }
 
     @Override
