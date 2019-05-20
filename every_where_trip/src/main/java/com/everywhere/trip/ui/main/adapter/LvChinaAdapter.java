@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
@@ -31,7 +32,7 @@ public class LvChinaAdapter extends BaseAdapter implements SideBar.OnTouchingLet
     List<RankLocation> locations = new ArrayList<RankLocation>();//排序后
     List<CityBean.ResultEntity.ChinaEntity.CitiesEntity> list = new ArrayList();//排序前
     Map<String, Integer> map = new HashMap<String, Integer>();
-    MyListView listView;
+    ListView listView;
     SideBar sideBar;
     Context context;
 
@@ -104,12 +105,10 @@ public class LvChinaAdapter extends BaseAdapter implements SideBar.OnTouchingLet
 
             @Override
             public void onClick(View v) {
-                if (onItemClickListener != null){
-                    RankLocation rankLocation;
-                        rankLocation = locations.get(position);
-                    onItemClickListener.onClick(rankLocation.location.getId(),rankLocation.location.getName(),
-                            new LatLng(rankLocation.location.getLatitude(),rankLocation.location.getLongitude()));
-
+                if (onItemClickListener != null) {
+                    RankLocation rankLocation = locations.get(position);
+                    onItemClickListener.onClick(rankLocation.location.getId(), rankLocation.location.getName(),
+                            new LatLng(rankLocation.location.getLatitude(), rankLocation.location.getLongitude()));
                 }
             }
         });
@@ -122,7 +121,7 @@ public class LvChinaAdapter extends BaseAdapter implements SideBar.OnTouchingLet
         TextView location_item_name;// 地址
     }
 
-    public void setListView(MyListView listView) {
+    public void setListView(ListView listView) {
         this.listView = listView;
     }
 
@@ -134,7 +133,7 @@ public class LvChinaAdapter extends BaseAdapter implements SideBar.OnTouchingLet
     @Override
     public void onTouchingLetterChanged(String s) {
         if (listView != null && map.get(s) != null) {
-            listView.setSelection(map.get(s));
+            listView.setSelection(map.get(s)+1);
         }
     }
 
@@ -156,7 +155,7 @@ public class LvChinaAdapter extends BaseAdapter implements SideBar.OnTouchingLet
         this.onItemClickListener = onItemClickListener;
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onClick(int id, String name, LatLng latLng);
     }
 }

@@ -104,7 +104,7 @@
         <activity
             android:name=".ui.main.activity.MainActivity"
             android:launchMode="singleTask"
-            android:theme="@style/FullScreen" />
+            android:theme="@style/AppTheme" />
         <activity android:name=".ui.my.activity.InformationActivity" />
         <activity android:name=".ui.my.activity.UpdateInfoActivity" />
         <activity android:name=".ui.my.activity.FollowActivity" />

@@ -18,7 +18,7 @@ import com.everywhere.trip.util.SystemUtil;
 
 public class SideBar extends View {
     private static String textColor = "#636363";
-    private static String selectTextColor = "#3399ff";
+    private static String selectTextColor = "#fa6a13";
     // 触摸事件
     private OnTouchingLetterChangedListener onTouchingLetterChangedListener;
     // 26个字母
